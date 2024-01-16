@@ -2,11 +2,11 @@
 #CLONE, INSTALL & CHANGE ENV FILE#
 # Set your Azure DevOps credentials
 
-username="******"
-password="******"
+username="Sathish.Selvaraj"
+password="*****************"
 
 # Set the IP address variable
-ip_address="13.201.171.164"
+ip_address="13.235.58.185"
 
 # Set the Git repository URL and UI directory
 auth_url="dev.azure.com/kovaionai/timesheet-baseline/_git/auth"
@@ -18,12 +18,12 @@ frontend="generic-workflows-frontend"
 branch="stage_10012024"
 
 # Define the domains
-frontenddomain="https://stage7.kovaion.ai"
-backenddomain="https://stage7.kovaion.ai/backend/api/v1/"
-authdomain="https://stage7.kovaion.ai/auth/api/v1/"
-subdomain="stage7" #landing page
-authdomain1="https://stage7.kovaion.ai/auth"
-subdomainIP="13.201.171.164"
+frontenddomain="https://stage22.kovaion.ai"
+backenddomain="https://stage22.kovaion.ai/backend/api/v1/"
+authdomain="https://stage22.kovaion.ai/auth/api/v1/"
+subdomain="stage22" #landing page
+authdomain1="https://stage22.kovaion.ai/auth"
+subdomainIP="13.235.58.185"
 
 mongodb="mongodb+srv://doadmin:3TtE8eidr017926A@mongodb-kovaion-stage-093f050e.mongo.ondigitalocean.com"
 doadmin="doadmin:3TtE8eidr017926A@mongodb-kovaion-stage-093f050e.mongo.ondigitalocean.com" #start from username ie omit the mongodb+srv://
@@ -223,7 +223,7 @@ pm2 start "npm start" --name frontend
 sudo apt install software-properties-common gnupg apt-transport-https ca-certificates -y
 
 # Add MongoDB GPG key
-curl -fsSL https://pgp.mongodb.com/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
+curl -fsSL https://pgp.mongodb.com/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor --y
 
 # Add MongoDB repository to sources list
 echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
@@ -246,15 +246,19 @@ sudo systemctl start mongod
 # Enable MongoDB to start on boot
 #sudo systemctl enable mongod
 
+mongodump --uri="mongodb+srv://doadmin:3TtE8eidr017926A@mongodb-kovaionprod-bk-18dec23-d2357f77.mongo.ondigitalocean.com/engage?authSource=admin&replicaSet=mongodb-kovaionprod-bk-18dec23&readPreference=primary&appname=MongoDB%20Compass&ssl=true" --out /home/my_dump
+
+mongorestore --uri="mongodb+srv://doadmin:3TtE8eidr017926A@mongodb-kovaion-stage-093f050e.mongo.ondigitalocean.com" -u doadmin -p 3TtE8eidr017926A --authenticationDatabase admin --db stage22-engage /home/my_dump/engage
+
 curl --location 'https://stage-q42023.kovaion.ai/backend/api/v1/tenant/client/addtenant' \
 --header 'Content-Type: application/json' \
 --data-raw '{
 
   "host": "doadmin:3TtE8eidr017926A@mongodb-kovaion-stage-093f050e.mongo.ondigitalocean.com",
   "port": "",
-  "client_name": "stage7-engage",
-  "sub_domain": "stage7-engage",
-  "dbname": "stage7-engage",
+  "client_name": "stage22-engage",
+  "sub_domain": "stage22-engage",
+  "dbname": "stage22-engage",
   "slug": "57989f64-8338-428f-9c61-24512b5b40e5",
   "tenant_name": "Kovaion_Consulting.kovaion",
   "email": "nk.murugesan@kovaion.com",
@@ -266,10 +270,6 @@ curl --location 'https://stage-q42023.kovaion.ai/backend/api/v1/tenant/client/ad
   "created_by": null,
   "created_at": "2022-12-10T10:41:53.721Z"
 }'
-
-mongodump --uri="mongodb+srv://doadmin:3TtE8eidr017926A@mongodb-kovaionprod-bk-18dec23-d2357f77.mongo.ondigitalocean.com/engage?authSource=admin&replicaSet=mongodb-kovaionprod-bk-18dec23&readPreference=primary&appname=MongoDB%20Compass&ssl=true" --out /home/my_dump
-
-mongorestore --uri="mongodb+srv://doadmin:3TtE8eidr017926A@mongodb-kovaion-stage-093f050e.mongo.ondigitalocean.com" -u doadmin -p 3TtE8eidr017926A --authenticationDatabase admin --db stage7-engage /home/my_dump/engage
 
 # Specify the path to the Nginx sites-available directory
 nginx_sites_available="/etc/nginx/sites-available"
@@ -283,7 +283,7 @@ server {
     listen 80;
     listen [::]:80;
 
-    server_name stage7.kovaion.ai;
+    server_name stage22.kovaion.ai;
     return 301 https://\$host\$request_uri;
 }
 
@@ -291,7 +291,7 @@ server {
     listen 443 ssl;
     listen [::]:443 ssl;
 
-    server_name stage7.kovaion.ai;
+    server_name stage22.kovaion.ai;
 
     ssl_certificate /etc/letsencrypt/live/kovaion.ai/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/kovaion.ai/privkey.pem;
