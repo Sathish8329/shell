@@ -29,6 +29,11 @@ sudo ss -pnltu | grep 27017
 # Enable MongoDB to start on boot
 sudo systemctl enable mongod
 
+
+mongodump --uri="mongodb+srv://doadmin:3TtE8eidr017926A@mongodb-kovaionprod-bk-18dec23-d2357f77.mongo.ondigitalocean.com/engage?authSource=admin&replicaSet=mongodb-kovaionprod-bk-18dec23&readPreference=primary&appname=MongoDB%20Compass&ssl=true" --out /home/my_dump
+
+mongorestore --uri="mongodb+srv://doadmin:3TtE8eidr017926A@mongodb-kovaion-stage-093f050e.mongo.ondigitalocean.com" -u doadmin -p 3TtE8eidr017926A --authenticationDatabase admin --db stage6-engage /home/my_dump/engage
+
 curl --location 'https://stage-q42023.kovaion.ai/backend/api/v1/tenant/client/addtenant' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -49,8 +54,3 @@ curl --location 'https://stage-q42023.kovaion.ai/backend/api/v1/tenant/client/ad
   "created_by": null,
   "created_at": "2022-12-10T10:41:53.721Z"
 }'
-
-mongodump --uri="mongodb+srv://doadmin:3TtE8eidr017926A@mongodb-kovaionprod-bk-18dec23-d2357f77.mongo.ondigitalocean.com/engage?authSource=admin&replicaSet=mongodb-kovaionprod-bk-18dec23&readPreference=primary&appname=MongoDB%20Compass&ssl=true" --out /home/my_dump
-
-mongorestore --uri="mongodb+srv://doadmin:3TtE8eidr017926A@mongodb-kovaion-stage-093f050e.mongo.ondigitalocean.com" -u doadmin -p 3TtE8eidr017926A --authenticationDatabase admin --db stage6-engage /home/my_dump/engage
-
