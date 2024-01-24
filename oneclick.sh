@@ -3,7 +3,7 @@
 # Set your Azure DevOps credentials
 
 username="Sathish.Selvaraj"
-password="jbxyjbf7jvbyj7f7km7f65acgig3kjw3gptu5usuxd3ewpol3gba"
+password="**************"
 
 # Set the IP address variable
 ip_address="13.235.61.83"
