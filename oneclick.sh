@@ -3,10 +3,13 @@
 # Set your Azure DevOps credentials
 
 username="Sathish.Selvaraj"
-password="**************"
+password="*******************"
 
 # Set the IP address variable
-ip_address="13.235.61.83"
+ip_address="52.66.226.228"
+subdomainIP="52.66.226.228"
+subdomain="five"
+branch="stage_10012024"
 
 # Set the Git repository URL and UI directory
 auth_url="dev.azure.com/kovaionai/timesheet-baseline/_git/auth"
@@ -15,15 +18,12 @@ backend_url="dev.azure.com/kovaionai/Generic-Workflows/_git/generic-workflows-ba
 backend="generic-workflows-backend"
 frontend_url="dev.azure.com/kovaionai/Generic-Workflows/_git/generic-workflows-frontend"
 frontend="generic-workflows-frontend"
-branch="stage_10012024"
 
 # Define the domains
-frontenddomain="https://checking.kovaion.ai"
-backenddomain="https://checking.kovaion.ai/backend/api/v1/"
-authdomain="https://checking.kovaion.ai/auth/api/v1/"
-subdomain="checking" #landing page
-authdomain1="https://checking.kovaion.ai/auth"
-subdomainIP="13.235.61.83"
+frontenddomain="https://$subdomain.kovaion.ai"
+backenddomain="https://$subdomain.kovaion.ai/backend/api/v1/"
+authdomain="https://$subdomain.kovaion.ai/auth/api/v1/"
+authdomain1="https://$subdomain.kovaion.ai/auth"
 
 mongodb="mongodb+srv://doadmin:3TtE8eidr017926A@mongodb-prod-backup-19jan2024-990abcf7.mongo.ondigitalocean.com"
 doadmin="doadmin:3TtE8eidr017926A@mongodb-prod-backup-19jan2024-990abcf7.mongo.ondigitalocean.com" #start from username ie omit the mongodb+srv://
@@ -116,19 +116,6 @@ curl --location --request PUT "https://api.godaddy.com/v1/domains/kovaion.ai/rec
 
 
 
-curl --location --request PUT "https://api.godaddy.com/v1/domains/kovaion.ai/records/A/$subdomain-engage" \
---header "Accept: application/json, text/plain, */*" \
---header "Authorization: sso-key Aa96gVTYG9E_Nh9Z47aSvnbiCSAHQogR5q:DadvTbD9W2BNDioLx4xNte" \
---header "Content-Type: application/json" \
---header "User-Agent: axios/0.27.2" \
---header "Cookie: _abck=26AFF87C8B196A72801866D26E76125D~-1~YAAQP5UvF/lyx/OMAQAA9GqELwtfH1el98LGV4EXM64BAp9tTsWjhGJABmh5W89heg0E+yyiy6ekfefWGrOr1kfQRzVxSW0n2vvz8Bjev8p574gYHDbleIbhe+XD7nSH0HbEsT00Qy6gsQBLrOCHKoI01jQI9TRwOQtaVlxk2nz+5C+46ZhjLYU7QbT+bLTAiL4b5pEfK+VqXFZUITC8Po4DERn9VscVBLeHTVtGH/nlHNjCInPnRIrz4HyEHvlI/mvNB62lSryPCgiN1r/1fAHEblvaSVLnpxvs0smgi+oppnNP/1tpId0slIINnLg61Rwq8b+MqEp/x3vHQL2LpqDyUmTogiFWA0YUCUvBNpD4bBe2artNHYrVK+s+gezEc+MIPaREb1A=~-1~-1~-1; bm_sz=0C71C54489E623956A9E59D4F5962444~YAAQP5UvF/pyx/OMAQAA9GqELxZ7n9VWmKgPCJfgbqrPPUvsPGHNl/8yOiLw2tlfMpJf65ulHmxLQwYW+0NOvvdB4JAf6IoWQXhaZyyRVtkOWjQG8GUn9bnJaspre0/hf7n9q729VeWCXgz9tSXKfzhJcIklbtlDlNpK48XB+Zbbi6R6wpF70JrxyuIQNmI0RgROp2m+fEH//SNY/phQucJdK3k4YB/bfMG9q0dgQ3mA+14lYUhPPV14Bm/Xpg5zvqsCCuqfSJwAgiZ3fWiCPcWvW6jedkhqhYVOcjipedd/8EaUmDNImPEJea3+1Ft1GEfcJjjwO/AEZk4vfzHA~4534328~3552837" \
---data '[
-    {
-        "data": "'"$ip_address"'",
-        "ttl": 600
-    }
-]'
-
 ##ssl here
 
 # Clone the Git repository
@@ -200,8 +187,8 @@ FILE_PATH_3="/root/webhook/scripts/app/generic-workflows-backend/.env"
 # Use sed to replace the values in the third file
 sed -i "s|AUTH_API_URL[[:space:]]*=[[:space:]]*https://.*|AUTH_API_URL=$authdomain1|" "$FILE_PATH_3"
 sed -i "s|FRONT_END_URL[[:space:]]*=[[:space:]]*https://.*|FRONT_END_URL=$frontenddomain|" "$FILE_PATH_3"
-sed -i "s|REDIS_HOST[[:space:]]*=[[:space:]]*.*|REDIS_HOST=$Redis_Host|" "$FILE_PATH_3"
-sed -i "s|REDIS_PORT[[:space:]]*=[[:space:]]*.*|REDIS_PORT=$Redis_Port|" "$FILE_PATH_3"
+sed -i "s|REDIS_HOST[[:space:]]*=[[:space:]]*.*|REDIS_HOST=$REDIS_HOST|" "$FILE_PATH_3"
+sed -i "s|REDIS_PORT[[:space:]]*=[[:space:]]*.*|REDIS_PORT=$REDIS_PORT|" "$FILE_PATH_3"
 sed -i "s|RESELLER_SLUG[[:space:]]*=[[:space:]]*.*|RESELLER_SLUG=$slug|" "$FILE_PATH_3"
 sed -i "s|SUB_DOAMIN_IP[[:space:]]*=[[:space:]]*.*|SUB_DOAMIN_IP=$subdomainIP|" "$FILE_PATH_3"
 sed -i "s|MAIN_DB_URL =.*|MAIN_DB_URL = $mongodb|" "$FILE_PATH_3"
@@ -282,7 +269,7 @@ sudo systemctl start mongod
 
 mongodump --uri="mongodb+srv://doadmin:3TtE8eidr017926A@mongodb-prod-backup-19jan2024-990abcf7.mongo.ondigitalocean.com/engage?authSource=admin&replicaSet=mongodb-prod-backup-19jan2024&readPreference=primary&appname=MongoDB%20Compass&ssl=true" --out /home/my_dump
 
-mongorestore --uri="mongodb+srv://doadmin:3TtE8eidr017926A@mongodb-prod-backup-19jan2024-990abcf7.mongo.ondigitalocean.com" -u doadmin -p 3TtE8eidr017926A --authenticationDatabase admin --db checking-engage /home/my_dump/engage
+mongorestore --uri="mongodb+srv://doadmin:3TtE8eidr017926A@mongodb-prod-backup-19jan2024-990abcf7.mongo.ondigitalocean.com" -u doadmin -p 3TtE8eidr017926A --authenticationDatabase admin --db $subdomain-engage /home/my_dump/engage
 
 nginx_sites_available="/etc/nginx/sites-available"
 
@@ -295,7 +282,7 @@ server {
     listen 80;
     listen [::]:80;
 
-    server_name checking.kovaion.ai;
+    server_name $subdomain.kovaion.ai;
     return 301 https://\$host\$request_uri;
 }
 
@@ -303,7 +290,7 @@ server {
     listen 443 ssl;
     listen [::]:443 ssl;
 
-    server_name checking.kovaion.ai;
+    server_name $subdomain.kovaion.ai;
 
     ssl_certificate /etc/letsencrypt/live/kovaion.ai/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/kovaion.ai/privkey.pem;
@@ -353,15 +340,15 @@ echo "$new_content" > "$nginx_sites_available/$default_file"
 systemctl restart nginx
 
 echo "Nginx configuration has been updated and Nginx has been restarted."
-curl --location 'https://checking.kovaion.ai/backend/api/v1/tenant/client/addtenant' \
+
+curl --location "https://$subdomain.kovaion.ai/backend/api/v1/tenant/client/addtenant" \
 --header 'Content-Type: application/json' \
 --data-raw '{
-
   "host": "doadmin:3TtE8eidr017926A@mongodb-prod-backup-19jan2024-990abcf7.mongo.ondigitalocean.com",
   "port": "",
-  "client_name": "checking-engage",
-  "sub_domain": "checking-engage",
-  "dbname": "checking-engage",
+  "client_name": "'"$subdomain-engage"'",
+  "sub_domain": "'"$subdomain-engage"'",
+  "dbname": "'"$subdomain-engage"'",
   "slug": "57989f64-8338-428f-9c61-24512b5b40e5",
   "tenant_name": "Kovaion_Consulting.kovaion",
   "email": "nk.murugesan@kovaion.com",
@@ -373,3 +360,17 @@ curl --location 'https://checking.kovaion.ai/backend/api/v1/tenant/client/addten
   "created_by": null,
   "created_at": "2022-12-10T10:41:53.721Z"
 }'
+
+
+curl --location --request PUT "https://api.godaddy.com/v1/domains/kovaion.ai/records/A/$subdomain-engage" \
+--header "Accept: application/json, text/plain, */*" \
+--header "Authorization: sso-key Aa96gVTYG9E_Nh9Z47aSvnbiCSAHQogR5q:DadvTbD9W2BNDioLx4xNte" \
+--header "Content-Type: application/json" \
+--header "User-Agent: axios/0.27.2" \
+--header "Cookie: _abck=26AFF87C8B196A72801866D26E76125D~-1~YAAQP5UvF/lyx/OMAQAA9GqELwtfH1el98LGV4EXM64BAp9tTsWjhGJABmh5W89heg0E+yyiy6ekfefWGrOr1kfQRzVxSW0n2vvz8Bjev8p574gYHDbleIbhe+XD7nSH0HbEsT00Qy6gsQBLrOCHKoI01jQI9TRwOQtaVlxk2nz+5C+46ZhjLYU7QbT+bLTAiL4b5pEfK+VqXFZUITC8Po4DERn9VscVBLeHTVtGH/nlHNjCInPnRIrz4HyEHvlI/mvNB62lSryPCgiN1r/1fAHEblvaSVLnpxvs0smgi+oppnNP/1tpId0slIINnLg61Rwq8b+MqEp/x3vHQL2LpqDyUmTogiFWA0YUCUvBNpD4bBe2artNHYrVK+s+gezEc+MIPaREb1A=~-1~-1~-1; bm_sz=0C71C54489E623956A9E59D4F5962444~YAAQP5UvF/pyx/OMAQAA9GqELxZ7n9VWmKgPCJfgbqrPPUvsPGHNl/8yOiLw2tlfMpJf65ulHmxLQwYW+0NOvvdB4JAf6IoWQXhaZyyRVtkOWjQG8GUn9bnJaspre0/hf7n9q729VeWCXgz9tSXKfzhJcIklbtlDlNpK48XB+Zbbi6R6wpF70JrxyuIQNmI0RgROp2m+fEH//SNY/phQucJdK3k4YB/bfMG9q0dgQ3mA+14lYUhPPV14Bm/Xpg5zvqsCCuqfSJwAgiZ3fWiCPcWvW6jedkhqhYVOcjipedd/8EaUmDNImPEJea3+1Ft1GEfcJjjwO/AEZk4vfzHA~4534328~3552837" \
+--data '[
+    {
+        "data": "'"$ip_address"'",
+        "ttl": 600
+    }
+]'
